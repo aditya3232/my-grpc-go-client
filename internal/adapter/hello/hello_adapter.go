@@ -2,6 +2,8 @@ package hello
 
 import (
 	"context"
+	"errors"
+	"io"
 	"log"
 
 	"github.com/aditya3232/my-grpc-go-client/internal/port"
@@ -32,4 +34,27 @@ func (a *HelloAdapter) SayHello(ctx context.Context, name string) (*hello.HelloR
 	}
 
 	return greet, nil
+}
+
+func (a *HelloAdapter) SayManyHellos(ctx context.Context, name string) {
+	helloRequest := &hello.HelloRequest{
+		Name: name,
+	}
+
+	greetStream, err := a.helloClient.SayManyHellos(ctx, helloRequest)
+	if err != nil {
+		log.Fatalln("Error on SayManyHellos : ", err)
+	}
+
+	for {
+		greet, err := greetStream.Recv()
+		switch {
+		case errors.Is(err, io.EOF):
+			return
+		case err != nil:
+			log.Fatalln("Error on SayManyHellos : ", err)
+		}
+
+		log.Println(greet.Greet)
+	}
 }
