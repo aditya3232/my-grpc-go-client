@@ -29,8 +29,8 @@ func main() {
 		log.Fatalln("Can not create HelloAdapter : ", err)
 	}
 
-	// runSayHello(helloAdapter, "iashiddiqi")
-	// runSayManyHellos(helloAdapter, "aditya3232")
+	runSayHello(helloAdapter, "iashiddiqi")
+	runSayManyHellos(helloAdapter, "aditya3232")
 	runSayHelloToEveryone(helloAdapter, []string{"invoker", "spectre", "juggernut", "muerta", "sven"})
 }
 
