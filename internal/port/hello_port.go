@@ -12,4 +12,5 @@ type HelloClientPort interface {
 	SayHello(ctx context.Context, in *hello.HelloRequest, opts ...grpc.CallOption) (*hello.HelloResponse, error)
 	SayManyHellos(ctx context.Context, in *hello.HelloRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[hello.HelloResponse], error)
 	SayHelloToEveryone(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[hello.HelloRequest, hello.HelloResponse], error)
+	SayHelloContinous(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[hello.HelloRequest, hello.HelloResponse], error)
 }

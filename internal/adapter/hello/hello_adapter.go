@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io"
 	"log"
+	"sync"
 	"time"
 
 	"github.com/aditya3232/my-grpc-go-client/internal/port"
@@ -81,4 +82,41 @@ func (a *HelloAdapter) SayHelloToEveryone(ctx context.Context, names []string) {
 	}
 
 	log.Println(res.Greet)
+}
+
+func (a *HelloAdapter) SayHelloContinous(ctx context.Context, names []string) {
+	greetStream, err := a.helloClient.SayHelloContinous(ctx)
+	if err != nil {
+		log.Fatalln("Error on SayHelloContinous : ", err)
+	}
+
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	// goroutine pertama mengirim request
+	go func() {
+		defer wg.Done()
+		for _, name := range names {
+			req := &hello.HelloRequest{Name: name}
+			greetStream.Send(req)
+		}
+		greetStream.CloseSend()
+	}()
+
+	// goroutine kedua menerima response
+	go func() {
+		defer wg.Done() // pastikan selalu dipanggil
+		for {
+			greet, err := greetStream.Recv()
+			switch {
+			case errors.Is(err, io.EOF):
+				return
+			case err != nil:
+				log.Fatalln("Error on SayHelloContinous : ", err)
+			}
+			log.Println(greet.Greet)
+		}
+	}()
+
+	wg.Wait()
 }
