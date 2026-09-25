@@ -1,0 +1,136 @@
+package resiliency
+
+import (
+	"context"
+	"errors"
+	"io"
+	"log"
+	"sync"
+
+	"github.com/aditya3232/my-grpc-go-client/internal/port"
+	resl "github.com/aditya3232/my-grpc-proto/protogen/go/resiliency"
+	"google.golang.org/grpc"
+)
+
+type ResiliencyAdapter struct {
+	resiliencyClient port.ResiliencyClientPort
+}
+
+func NewResiliencyAdapter(conn *grpc.ClientConn) (*ResiliencyAdapter, error) {
+	client := resl.NewResiliencyServiceClient(conn)
+	return &ResiliencyAdapter{
+		resiliencyClient: client,
+	}, nil
+}
+
+func (a *ResiliencyAdapter) UnaryResiliency(ctx context.Context, minDelaySecond int32, maxDelaySecond int32,
+	statusCodes []uint32) (*resl.ResiliencyResponse, error) {
+	resiliencyRequest := &resl.ResiliencyRequest{
+		MinDelaySecond: minDelaySecond,
+		MaxDelaySecond: maxDelaySecond,
+		StatusCodes:    statusCodes,
+	}
+
+	res, err := a.resiliencyClient.UnaryResiliency(ctx, resiliencyRequest)
+	if err != nil {
+		log.Fatalln("Error on UnaryResiliency : ", err)
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (a *ResiliencyAdapter) ServerStreamingResiliency(ctx context.Context, minDelaySecond int32, maxDelaySecond int32,
+	statusCodes []uint32) {
+	resiliencyRequest := &resl.ResiliencyRequest{
+		MinDelaySecond: minDelaySecond,
+		MaxDelaySecond: maxDelaySecond,
+		StatusCodes:    statusCodes,
+	}
+
+	reslStream, err := a.resiliencyClient.ServerStreamingResiliency(ctx, resiliencyRequest)
+	if err != nil {
+		log.Fatalln("Error on ServerStreamingResiliency :", err)
+	}
+
+	for {
+		res, err := reslStream.Recv()
+		switch {
+		case errors.Is(err, io.EOF):
+			return
+		case err != nil:
+			log.Fatalln("Error on ServerStreamingResiliency :", err)
+		default:
+			log.Println(res.DummyString)
+		}
+	}
+}
+
+func (a *ResiliencyAdapter) ClientStreamingResiliency(ctx context.Context, minDelaySecond int32, maxDelaySecond int32,
+	statusCodes []uint32, count int) {
+	reslStream, err := a.resiliencyClient.ClientStreamingResiliency(ctx)
+	if err != nil {
+		log.Fatalln("Error on ClientStreamingResiliency :", err)
+	}
+
+	for i := 1; i <= count; i++ {
+		resiliencyRequest := &resl.ResiliencyRequest{
+			MinDelaySecond: minDelaySecond,
+			MaxDelaySecond: maxDelaySecond,
+			StatusCodes:    statusCodes,
+		}
+
+		reslStream.Send(resiliencyRequest)
+	}
+
+	res, err := reslStream.CloseAndRecv()
+	if err != nil {
+		log.Fatalln("Error on ClientStreamingResiliency :", err)
+	}
+
+	log.Println(res.DummyString)
+}
+
+func (a *ResiliencyAdapter) BiDirectionalResiliency(ctx context.Context, minDelaySecond int32,
+	maxDelaySecond int32, statusCodes []uint32, count int) {
+	reslStream, err := a.resiliencyClient.BiDirectionalResiliency(ctx)
+	if err != nil {
+		log.Fatalln("Error on BiDirectionalResiliency :", err)
+	}
+
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	go func() {
+		defer wg.Done()
+		for i := 1; i <= count; i++ {
+			resiliencyRequest := &resl.ResiliencyRequest{
+				MinDelaySecond: minDelaySecond,
+				MaxDelaySecond: maxDelaySecond,
+				StatusCodes:    statusCodes,
+			}
+
+			reslStream.Send(resiliencyRequest)
+		}
+
+		reslStream.CloseSend()
+	}()
+
+	go func() {
+		defer wg.Done()
+		for {
+			res, err := reslStream.Recv()
+
+			switch {
+			case errors.Is(err, io.EOF):
+				return
+			case err != nil:
+				log.Fatalln("Error on BiDirectionalResiliency :", err)
+			default:
+				log.Println(res.DummyString)
+			}
+		}
+	}()
+
+	wg.Wait()
+}

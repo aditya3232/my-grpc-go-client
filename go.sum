@@ -1,5 +1,7 @@
 github.com/aditya3232/my-grpc-proto v0.0.0-20260924073249-e2b1edceec3d h1:xPqOQwiljffb9Iu/FIa4vcr3+q895086wORZa84q0xU=
 github.com/aditya3232/my-grpc-proto v0.0.0-20260924073249-e2b1edceec3d/go.mod h1:I6zSzLv5Xk1/3U/xwifLN36ER2VdA26bZBWdDip351Y=
+github.com/aditya3232/my-grpc-proto v0.0.0-20260925021541-8a5114be8f2d h1:+mvsVvTBvMNkiWBRnA93WfNc3aqJzNOc4THYR3qGP3s=
+github.com/aditya3232/my-grpc-proto v0.0.0-20260925021541-8a5114be8f2d/go.mod h1:I6zSzLv5Xk1/3U/xwifLN36ER2VdA26bZBWdDip351Y=
 github.com/golang/protobuf v1.5.4 h1:i7eJL8qZTpSEXOPTxNKhASYpMn+8e5Q6AdndVa1dWek=
 github.com/golang/protobuf v1.5.4/go.mod h1:lnTiLA8Wa4RWRcIUkrtSVa5nRhsEGBg48fD6rSs7xps=
 github.com/google/go-cmp v0.7.0 h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=

@@ -3,7 +3,7 @@ module github.com/aditya3232/my-grpc-go-client
 go 1.26.4
 
 require (
-	github.com/aditya3232/my-grpc-proto v0.0.0-20260924073249-e2b1edceec3d
+	github.com/aditya3232/my-grpc-proto v0.0.0-20260925021541-8a5114be8f2d
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260918162117-cecb64721679
 	google.golang.org/grpc v1.84.0
 )
