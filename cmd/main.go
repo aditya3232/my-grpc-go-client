@@ -88,10 +88,12 @@ func main() {
 	// runClientStreamingResiliencyWithTimeout(resiliencyAdapter, 0, 3, []uint32{dresl.OK}, 10, 10*time.Second)
 	// runBiDirectionalResiliencyWithTimeout(resiliencyAdapter, 0, 3, []uint32{dresl.OK}, 10, 10*time.Second)
 
-	for i := 0; i < 300; i++ {
-		runUnaryResiliencyWithCircuitBreaker(resiliencyAdapter, 0, 0, []uint32{dresl.UNKNOWN, dresl.OK})
-		time.Sleep(time.Second)
-	}
+	// for i := 0; i < 300; i++ {
+	// 	runUnaryResiliencyWithCircuitBreaker(resiliencyAdapter, 0, 0, []uint32{dresl.UNKNOWN, dresl.OK})
+	// 	time.Sleep(time.Second)
+	// }
+
+	runUnaryResiliencyWithMetadata(resiliencyAdapter, 0, 1, []uint32{dresl.OK})
 }
 
 // func runSayHello(adapter *hello.HelloAdapter, name string) {
@@ -208,16 +210,26 @@ func main() {
 // 	adapter.BiDirectionalResiliency(ctx, minDelaySecond, maxDelaySecond, statusCodes, count)
 // }
 
-func runUnaryResiliencyWithCircuitBreaker(adapter *resiliency.ResiliencyAdapter, minDelaySecond int32,
+// func runUnaryResiliencyWithCircuitBreaker(adapter *resiliency.ResiliencyAdapter, minDelaySecond int32,
+// 	maxDelaySecond int32, statusCodes []uint32) {
+
+// 	res, err := cbreaker.Execute(func() (*resl.ResiliencyResponse, error) {
+// 		return adapter.UnaryResiliency(context.Background(), minDelaySecond, maxDelaySecond, statusCodes)
+// 	})
+
+// 	if err != nil {
+// 		log.Println("Error on UnaryResiliency : ", err)
+// 		return
+// 	}
+
+// 	log.Println(res.DummyString)
+// }
+
+func runUnaryResiliencyWithMetadata(adapter *resiliency.ResiliencyAdapter, minDelaySecond int32,
 	maxDelaySecond int32, statusCodes []uint32) {
-
-	res, err := cbreaker.Execute(func() (*resl.ResiliencyResponse, error) {
-		return adapter.UnaryResiliency(context.Background(), minDelaySecond, maxDelaySecond, statusCodes)
-	})
-
+	res, err := adapter.UnaryResiliencyWithMetadata(context.Background(), minDelaySecond, maxDelaySecond, statusCodes)
 	if err != nil {
-		log.Println("Error on UnaryResiliency : ", err)
-		return
+		log.Fatalln("Failed to call UnaryResiliencyWithMetadata : ", err)
 	}
 
 	log.Println(res.DummyString)

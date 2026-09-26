@@ -2,10 +2,14 @@ github.com/aditya3232/my-grpc-proto v0.0.0-20260924073249-e2b1edceec3d h1:xPqOQw
 github.com/aditya3232/my-grpc-proto v0.0.0-20260924073249-e2b1edceec3d/go.mod h1:I6zSzLv5Xk1/3U/xwifLN36ER2VdA26bZBWdDip351Y=
 github.com/aditya3232/my-grpc-proto v0.0.0-20260925021541-8a5114be8f2d h1:+mvsVvTBvMNkiWBRnA93WfNc3aqJzNOc4THYR3qGP3s=
 github.com/aditya3232/my-grpc-proto v0.0.0-20260925021541-8a5114be8f2d/go.mod h1:I6zSzLv5Xk1/3U/xwifLN36ER2VdA26bZBWdDip351Y=
+github.com/aditya3232/my-grpc-proto v0.0.0-20260926015329-afe59664763a h1:L1cLsjfRLL6bEUACsPiRSQKpkbiUoSMypmq5cLapZHY=
+github.com/aditya3232/my-grpc-proto v0.0.0-20260926015329-afe59664763a/go.mod h1:I6zSzLv5Xk1/3U/xwifLN36ER2VdA26bZBWdDip351Y=
 github.com/golang/protobuf v1.5.4 h1:i7eJL8qZTpSEXOPTxNKhASYpMn+8e5Q6AdndVa1dWek=
 github.com/golang/protobuf v1.5.4/go.mod h1:lnTiLA8Wa4RWRcIUkrtSVa5nRhsEGBg48fD6rSs7xps=
 github.com/google/go-cmp v0.7.0 h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=
 github.com/google/go-cmp v0.7.0/go.mod h1:pXiqmnSA92OHEEa9HXL2W4E7lf9JzCmGVUdgjX3N/iU=
+github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
+github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/sony/gobreaker/v2 v2.4.0 h1:g2KJRW1Ubty3+ZOcSEUN7K+REQJdN6yo6XvaML+jptg=
 github.com/sony/gobreaker/v2 v2.4.0/go.mod h1:pTyFJgcZ3h2tdQVLZZruK2C0eoFL1fb/G83wK1ZQl+s=
 golang.org/x/net v0.59.0 h1:5zfYln+w5XCxwrnMMJPufRgNoXEaGxl0wo5GqPXyues=
