@@ -33,7 +33,7 @@ func (a *ResiliencyAdapter) UnaryResiliency(ctx context.Context, minDelaySecond 
 
 	res, err := a.resiliencyClient.UnaryResiliency(ctx, resiliencyRequest)
 	if err != nil {
-		log.Fatalln("Error on UnaryResiliency : ", err)
+		log.Println("Error on UnaryResiliency : ", err)
 		return nil, err
 	}
 
